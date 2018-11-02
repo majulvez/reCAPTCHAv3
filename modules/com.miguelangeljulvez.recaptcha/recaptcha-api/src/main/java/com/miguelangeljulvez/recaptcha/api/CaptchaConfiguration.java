@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.miguelangeljulvez.recaptcha;
+package com.miguelangeljulvez.recaptcha.api;
 
 import aQute.bnd.annotation.metatype.Meta;
 

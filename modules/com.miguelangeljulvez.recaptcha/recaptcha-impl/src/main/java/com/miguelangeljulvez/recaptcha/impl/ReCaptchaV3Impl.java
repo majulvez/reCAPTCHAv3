@@ -1,21 +1,6 @@
-/**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- */
-
-package com.miguelangeljulvez.recaptcha;
+package com.miguelangeljulvez.recaptcha.impl;
 
 import com.liferay.captcha.configuration.CaptchaConfiguration;
-import com.liferay.captcha.recaptcha.ReCaptchaImpl;
 import com.liferay.captcha.simplecaptcha.SimpleCaptchaImpl;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -50,16 +35,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
+import com.miguelangeljulvez.recaptcha.api.RecaptchaV3Keys;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 
-/**
- * @author Tagnaouti Boubker
- * @author Jorge Ferrer
- * @author Brian Wing Shun Chan
- * @author Daniel Sanz
- */
 @Component(
 	configurationPid = "com.liferay.captcha.configuration.CaptchaConfiguration",
 	immediate = true,
@@ -91,8 +71,7 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 	@Modified
 	@Override
 	protected void activate(Map<String, Object> properties) {
-		_captchaConfiguration = ConfigurableUtil.createConfigurable(
-			CaptchaConfiguration.class, properties);
+		_captchaConfiguration = ConfigurableUtil.createConfigurable(CaptchaConfiguration.class, properties);
 
 		setCaptchaConfiguration(_captchaConfiguration);
 	}
@@ -101,26 +80,20 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 	protected boolean validateChallenge(HttpServletRequest request)
 		throws CaptchaException {
 
-		String reCaptchaResponse = ParamUtil.getString(
-			request, "g-recaptcha-response");
+		String reCaptchaResponse = ParamUtil.getString(request, "g-recaptcha-response");
 
-		String reCaptchaResponseAction = ParamUtil.getString(
-				request, "g-recaptcha-response-action");
+		String reCaptchaResponseAction = ParamUtil.getString(request, "g-recaptcha-response-action");
 
 		while (Validator.isBlank(reCaptchaResponse) &&
 			   (request instanceof HttpServletRequestWrapper)) {
 
-			HttpServletRequestWrapper httpServletRequestWrapper =
-				(HttpServletRequestWrapper)request;
+			HttpServletRequestWrapper httpServletRequestWrapper = (HttpServletRequestWrapper)request;
 
-			request =
-				(HttpServletRequest)httpServletRequestWrapper.getRequest();
+			request = (HttpServletRequest)httpServletRequestWrapper.getRequest();
 
-			reCaptchaResponse = ParamUtil.getString(
-				request, "g-recaptcha-response");
+			reCaptchaResponse = ParamUtil.getString(request, "g-recaptcha-response");
 
-			reCaptchaResponseAction = ParamUtil.getString(
-					request, "g-recaptcha-response-action");
+			reCaptchaResponseAction = ParamUtil.getString(request, "g-recaptcha-response-action");
 		}
 
 		if (Validator.isBlank(reCaptchaResponse) || Validator.isBlank(reCaptchaResponseAction)) {
@@ -136,8 +109,7 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 		options.setLocation(_captchaConfiguration.reCaptchaVerifyURL());
 
 		try {
-			options.addPart(
-				"secret", _captchaConfiguration.reCaptchaPrivateKey());
+			options.addPart("secret", _captchaConfiguration.reCaptchaPrivateKey());
 		}
 		catch (SystemException se) {
 			_log.error(se, se);
@@ -185,6 +157,7 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 				throw new CaptchaTextException();
 			}
 
+			//Se podría hacer que para cada action, fuera un score mínimo diferente
 			if (score > 0.1) {
 				return true;
 			}
@@ -229,7 +202,7 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 		return validateChallenge(request);
 	}
 
-	private static final String _TAGLIB_PATH = "/captcha/recaptcha.jsp";
+	private static final String _TAGLIB_PATH = "/recaptcha/recaptcha.jsp";
 
 	private static final Log _log = LogFactoryUtil.getLog(ReCaptchaV3Impl.class);
 

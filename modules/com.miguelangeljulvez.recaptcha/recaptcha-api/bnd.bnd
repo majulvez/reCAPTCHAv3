@@ -1,0 +1,5 @@
+Bundle-SymbolicName: com.miguelangeljulvez.recaptcha.api
+Bundle-Version: 1.0.0
+Export-Package: com.miguelangeljulvez.recaptcha.api
+
+-metatype: *

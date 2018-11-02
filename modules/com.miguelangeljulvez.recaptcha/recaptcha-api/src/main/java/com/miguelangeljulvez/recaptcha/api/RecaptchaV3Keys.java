@@ -1,4 +1,4 @@
-package com.miguelangeljulvez.recaptcha;
+package com.miguelangeljulvez.recaptcha.api;
 
 public class RecaptchaV3Keys {
 

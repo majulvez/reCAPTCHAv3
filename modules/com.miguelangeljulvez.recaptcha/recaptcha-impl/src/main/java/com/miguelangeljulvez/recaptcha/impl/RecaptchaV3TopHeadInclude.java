@@ -1,10 +1,12 @@
-package com.miguelangeljulvez.recaptcha;
+package com.miguelangeljulvez.recaptcha.impl;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
+import com.miguelangeljulvez.recaptcha.api.CaptchaConfiguration;
+import com.miguelangeljulvez.recaptcha.api.RecaptchaV3Keys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 

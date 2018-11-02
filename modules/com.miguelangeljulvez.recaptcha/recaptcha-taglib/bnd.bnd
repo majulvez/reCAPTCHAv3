@@ -1,0 +1,10 @@
+Bundle-Name: reCAPTCHA Taglib
+Bundle-SymbolicName: com.miguelangeljulvez.recaptcha.taglib
+Bundle-Version: 1.0.0
+Export-Package: com.miguelangeljulvez.recaptcha.taglib
+Provide-Capability:\
+	osgi.extender;\
+		osgi.extender="jsp.taglib";\
+		uri="http://miguelangeljulvez.com/tld/recaptcha";\
+		version:Version="${Bundle-Version}"
+Web-ContextPath: /recaptcha-taglib
