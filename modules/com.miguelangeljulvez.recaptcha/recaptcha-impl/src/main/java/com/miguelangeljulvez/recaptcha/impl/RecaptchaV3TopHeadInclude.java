@@ -1,12 +1,12 @@
 package com.miguelangeljulvez.recaptcha.impl;
 
+import com.liferay.captcha.configuration.CaptchaConfiguration;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
-import com.miguelangeljulvez.recaptcha.api.CaptchaConfiguration;
-import com.miguelangeljulvez.recaptcha.api.RecaptchaV3Keys;
+import com.liferay.captcha.configuration.RecaptchaV3Keys;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -33,12 +33,12 @@ public class RecaptchaV3TopHeadInclude implements DynamicInclude {
             if (captchaEnabled && RecaptchaV3Keys.NAME.equals(captchaConfiguration.captchaEngine())) {
 
                 PrintWriter writer = response.getWriter();
-                writer.println("<script data-senna-track=\"temporary\" src='" + scriptURL + "?render=" + publicCaptchaKey + "'></script>");
                 writer.println("<script data-senna-track=\"temporary\">\n" +
                         "           grecaptcha.ready(function() {\n" +
-                        "               grecaptcha.execute('" + publicCaptchaKey + "', {action: 'webpage'})\n" +
+                        "               grecaptcha.execute('" + publicCaptchaKey + "', {action: 'homepage'})\n" +
                         "           });\n" +
                         "       </script>");
+                writer.println("<script data-senna-track=\"temporary\" src='" + scriptURL + "?render=" + publicCaptchaKey + "'></script>");
 
             }
 

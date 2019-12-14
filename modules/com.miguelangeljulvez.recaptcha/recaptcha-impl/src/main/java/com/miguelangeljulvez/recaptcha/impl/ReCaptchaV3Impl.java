@@ -35,16 +35,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
-import com.miguelangeljulvez.recaptcha.api.RecaptchaV3Keys;
+import com.liferay.captcha.configuration.RecaptchaV3Keys;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 
 @Component(
-	configurationPid = "com.liferay.captcha.configuration.CaptchaConfiguration",
-	immediate = true,
-	property = "captcha.engine.impl=" + RecaptchaV3Keys.NAME,
-	service = Captcha.class
+		configurationPid = "com.liferay.captcha.configuration.CaptchaConfiguration",
+		immediate = true,
+		property = "captcha.engine.impl=" + RecaptchaV3Keys.NAME,
+		service = Captcha.class
 )
 public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 
@@ -55,14 +55,14 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 
 	@Override
 	public void serveImage(
-		HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response) {
 
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void serveImage(
-		ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse) {
 
 		throw new UnsupportedOperationException();
 	}
@@ -78,14 +78,14 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 
 	@Override
 	protected boolean validateChallenge(HttpServletRequest request)
-		throws CaptchaException {
+			throws CaptchaException {
 
 		String reCaptchaResponse = ParamUtil.getString(request, "g-recaptcha-response");
 
 		String reCaptchaResponseAction = ParamUtil.getString(request, "g-recaptcha-response-action");
 
 		while (Validator.isBlank(reCaptchaResponse) &&
-			   (request instanceof HttpServletRequestWrapper)) {
+				(request instanceof HttpServletRequestWrapper)) {
 
 			HttpServletRequestWrapper httpServletRequestWrapper = (HttpServletRequestWrapper)request;
 
@@ -98,8 +98,8 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 
 		if (Validator.isBlank(reCaptchaResponse) || Validator.isBlank(reCaptchaResponseAction)) {
 			_log.error(
-				"CAPTCHA text is null. User " + request.getRemoteUser() +
-					" may be trying to circumvent the CAPTCHA.");
+					"CAPTCHA text is null. User " + request.getRemoteUser() +
+							" may be trying to circumvent the CAPTCHA.");
 
 			throw new CaptchaTextException();
 		}
@@ -186,7 +186,7 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 		}
 		catch (JSONException jsone) {
 			_log.error(
-				"reCAPTCHA did not return a valid result: " + content, jsone);
+					"reCAPTCHA did not return a valid result: " + content, jsone);
 
 			throw new CaptchaConfigurationException();
 		}
@@ -194,17 +194,17 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 
 	@Override
 	protected boolean validateChallenge(PortletRequest portletRequest)
-		throws CaptchaException {
+			throws CaptchaException {
 
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
-			portletRequest);
+				portletRequest);
 
 		return validateChallenge(request);
 	}
 
-	private static final String _TAGLIB_PATH = "/recaptcha/recaptcha.jsp";
+	private static final String _TAGLIB_PATH = "/recaptchaV3/recaptchaV3.jsp";
 
-	private static final Log _log = LogFactoryUtil.getLog(ReCaptchaV3Impl.class);
+	private final Log _log = LogFactoryUtil.getLog(this.getClass());
 
 	private volatile CaptchaConfiguration _captchaConfiguration;
 

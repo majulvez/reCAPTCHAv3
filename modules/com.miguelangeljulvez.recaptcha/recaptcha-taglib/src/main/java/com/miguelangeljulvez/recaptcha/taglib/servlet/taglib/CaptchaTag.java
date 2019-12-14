@@ -36,7 +36,7 @@ public class CaptchaTag extends IncludeTag {
 		request.setAttribute("maj-captcha:recaptcha:action", _action);
 	}
 
-	private static final String _PAGE = "/recaptcha/page.jsp";
+	private static final String _PAGE = "/recaptchaV3/page.jsp";
 
 	private String _action;
 
