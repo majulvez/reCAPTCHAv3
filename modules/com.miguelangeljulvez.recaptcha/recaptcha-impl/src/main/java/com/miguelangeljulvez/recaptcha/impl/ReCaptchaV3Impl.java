@@ -157,9 +157,15 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 				throw new CaptchaTextException();
 			}
 
-			//Se podría hacer que para cada action, fuera un score mínimo diferente
-			if (score > 0.1) {
-				return true;
+			String threshold = (String)request.getAttribute("maj-captcha:recaptcha:threshold");
+
+			try {
+				if (score > Double.parseDouble(threshold)) {
+					return true;
+				}
+			}
+			catch(NumberFormatException e) {
+				_log.info("El campo threshold no tiene un valor numérico");
 			}
 
 			JSONArray jsonArray = jsonObject.getJSONArray("error-codes");
