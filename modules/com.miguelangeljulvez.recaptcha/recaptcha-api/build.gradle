@@ -1,11 +1,11 @@
 dependencies {
-	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "4.4.0"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "5.0.0"
 	compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
 
 	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bnd.annotation", version: "4.2.0"
 	compileOnly group: 'com.liferay', name: 'com.liferay.portal.configuration.metatype.api', version: '2.0.7'
 
-	compile group: 'com.liferay', name: 'com.liferay.captcha.api', version: '3.0.12'
+	compile group: 'com.liferay', name: 'com.liferay.captcha.api', version: '4.0.4'
 
 }
 
