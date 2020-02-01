@@ -1,6 +1,6 @@
 # Recaptcha V3
 
-Este module configura Liferay 7.2 con una nueva opción para poder usar reCAPTCHAv3
+Este module configura Liferay 7.3 con una nueva opción para poder usar reCAPTCHAv3
 
 ##Para compilar:
 
