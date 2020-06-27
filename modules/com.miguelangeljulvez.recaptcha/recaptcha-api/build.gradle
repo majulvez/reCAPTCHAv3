@@ -3,7 +3,7 @@ dependencies {
 	compileOnly group: "org.osgi", name: "osgi.cmpn", version: "6.0.0"
 
 	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bnd.annotation", version: "4.2.0"
-	compileOnly group: 'com.liferay', name: 'com.liferay.portal.configuration.metatype.api', version: '2.0.7'
+	compileOnly group: 'com.liferay', name: 'com.liferay.portal.configuration.metatype.api', version: '3.0.0'
 
 	compile group: 'com.liferay', name: 'com.liferay.captcha.api', version: '4.1.1'
 
