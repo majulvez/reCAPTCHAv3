@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Captcha API
 Bundle-SymbolicName: com.liferay.captcha.api
-Bundle-Version: 4.0.4
+Bundle-Version: 4.1.1
 
 Export-Package: \
 	com.liferay.captcha.configuration,\
@@ -9,4 +9,4 @@ Export-Package: \
 	com.liferay.captcha.recaptchav3,\
 	com.liferay.captcha.util
 
-Include-Resource: @com.liferay.captcha.api-4.0.4.jar!/!com/liferay/captcha/configuration/CaptchaConfiguration.class
+Include-Resource: @com.liferay.captcha.api-4.1.1.jar!/!com/liferay/captcha/configuration/CaptchaConfiguration.class

@@ -5,7 +5,7 @@ dependencies {
 	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bnd.annotation", version: "4.2.0"
 	compileOnly group: 'com.liferay', name: 'com.liferay.portal.configuration.metatype.api', version: '2.0.7'
 
-	compile group: 'com.liferay', name: 'com.liferay.captcha.api', version: '4.0.7'
+	compile group: 'com.liferay', name: 'com.liferay.captcha.api', version: '4.1.1'
 
 }
 
