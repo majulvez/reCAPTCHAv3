@@ -1,6 +1,7 @@
 package com.miguelangeljulvez.recaptcha.impl;
 
 import com.liferay.captcha.configuration.CaptchaConfiguration;
+import com.liferay.captcha.configuration.RecaptchaV3Keys;
 import com.liferay.captcha.simplecaptcha.SimpleCaptchaImpl;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
@@ -15,30 +16,21 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.HttpUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-
-import java.io.IOException;
-
-import java.util.Map;
+import com.liferay.portal.kernel.util.*;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-
-import com.liferay.captcha.configuration.RecaptchaV3Keys;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Map;
 
 @Component(
 		configurationPid = "com.liferay.captcha.configuration.CaptchaConfiguration",
@@ -74,6 +66,63 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 		_captchaConfiguration = ConfigurableUtil.createConfigurable(CaptchaConfiguration.class, properties);
 
 		setCaptchaConfiguration(_captchaConfiguration);
+	}
+
+	@Override
+	public void check(PortletRequest portletRequest) throws CaptchaException {
+		check(portal.getHttpServletRequest(portletRequest));
+	}
+
+	@Override
+	public boolean isEnabled(HttpServletRequest httpServletRequest) {
+		if (isExceededMaxChallenges(httpServletRequest)) {
+			return false;
+		}
+
+		if (_captchaConfiguration.maxChallenges() >= 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled(PortletRequest portletRequest) {
+		return isEnabled(portal.getHttpServletRequest(portletRequest));
+	}
+
+	protected boolean isExceededMaxChallenges(
+			HttpServletRequest httpServletRequest) {
+
+		if (_captchaConfiguration.maxChallenges() > 0) {
+			HttpSession httpSession = getHttpSession(httpServletRequest);
+
+			Integer count = (Integer)httpSession.getAttribute(
+					_getHttpSessionKey(WebKeys.CAPTCHA_COUNT, httpServletRequest));
+
+			return isExceededMaxChallenges(count);
+		}
+
+		return false;
+	}
+
+	private String _getHttpSessionKey(
+			String key, HttpServletRequest httpServletRequest) {
+
+		String portletId = portal.getPortletId(httpServletRequest);
+
+		if (Validator.isNotNull(portletId)) {
+			return portal.getPortletNamespace(portletId) + key;
+		}
+
+		return key;
+	}
+
+	private HttpSession getHttpSession(HttpServletRequest httpServletRequest) {
+		HttpServletRequest originalHttpServletRequest =
+				portal.getOriginalServletRequest(httpServletRequest);
+
+		return originalHttpServletRequest.getSession();
 	}
 
 	@Override
@@ -208,4 +257,6 @@ public class ReCaptchaV3Impl extends SimpleCaptchaImpl {
 
 	private volatile CaptchaConfiguration _captchaConfiguration;
 
+	@Reference
+	protected Portal portal;
 }

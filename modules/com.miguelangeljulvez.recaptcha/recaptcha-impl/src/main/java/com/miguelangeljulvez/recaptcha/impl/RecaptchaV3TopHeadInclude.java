@@ -7,6 +7,8 @@ import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
 import com.liferay.captcha.configuration.RecaptchaV3Keys;
+import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
+import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -15,9 +17,9 @@ import java.io.PrintWriter;
 
 @Component(
         immediate = true,
-        service = DynamicInclude.class
+        service = com.liferay.portal.kernel.servlet.taglib.DynamicInclude.class
 )
-public class RecaptchaV3TopHeadInclude implements DynamicInclude {
+public class RecaptchaV3TopHeadInclude implements com.liferay.portal.kernel.servlet.taglib.DynamicInclude {
 
     @Override
     public void include(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, String key) throws IOException {
@@ -33,13 +35,12 @@ public class RecaptchaV3TopHeadInclude implements DynamicInclude {
             if (captchaEnabled && RecaptchaV3Keys.NAME.equals(captchaConfiguration.captchaEngine())) {
 
                 PrintWriter writer = response.getWriter();
+                writer.println("<script data-senna-track=\"temporary\" src='" + scriptURL + "?render=" + publicCaptchaKey + "'></script>");
                 writer.println("<script data-senna-track=\"temporary\">\n" +
                         "           grecaptcha.ready(function() {\n" +
                         "               grecaptcha.execute('" + publicCaptchaKey + "', {action: 'homepage'})\n" +
                         "           });\n" +
                         "       </script>");
-                writer.println("<script data-senna-track=\"temporary\" src='" + scriptURL + "?render=" + publicCaptchaKey + "'></script>");
-
             }
 
         } catch (ConfigurationException e) {
